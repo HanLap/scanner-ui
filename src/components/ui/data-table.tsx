@@ -107,7 +107,6 @@ const DataTable = <T,>({
 	);
 
 	const sorted = useMemo(() => {
-		console.log('run sort', sort);
 		if (!sort) return data;
 
 		const col = columns.find(({ id }) => id === sort.id);
