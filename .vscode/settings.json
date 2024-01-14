@@ -1,8 +1,12 @@
 {
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [80]
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [80],
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80
   }
 }
