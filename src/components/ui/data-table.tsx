@@ -24,10 +24,6 @@ export type ColumnDefinition<TEntry> = {
 	cellProps?: ComponentProps<typeof TableCell>;
 };
 
-type KeysOfType<T, U> = {
-	[K in keyof T as T[K] extends U ? K : never]: T[K];
-};
-
 type AccessorDefinition<TEntry, TValue extends TEntry[keyof TEntry]> = Omit<
 	ColumnDefinition<TEntry>,
 	'id' | 'cell'
@@ -60,8 +56,14 @@ type DataTableProps<TEntry> = {
 	rowKey: (entry: TEntry) => Key | null | undefined;
 	data: TEntry[];
 	columns: ColumnDefinition<TEntry>[];
+	disabledRows: TEntry[];
 	className?: string;
 	sort?: SortOrder<TEntry>;
+	rowComponent?: (props: {
+		children: ReactNode[];
+		entry: TEntry;
+		disabled: boolean;
+	}) => ReactNode;
 	onSortChanged: (sort: SortOrder<TEntry>) => void;
 };
 
@@ -69,8 +71,10 @@ const DataTable = <T,>({
 	className,
 	columns,
 	data,
+	disabledRows,
 	rowKey,
 	sort,
+	rowComponent,
 	onSortChanged,
 }: DataTableProps<T>) => {
 	const header = useMemo(
@@ -119,14 +123,20 @@ const DataTable = <T,>({
 
 	const body = useMemo(
 		() =>
-			sorted.map((entry) => (
-				<TableRow key={rowKey(entry)}>
-					{columns.map((colDef) => (
-						<TableCell key={colDef.id}>{colDef.cell({ entry })}</TableCell>
-					))}
-				</TableRow>
-			)),
-		[sorted, columns, rowKey],
+			sorted.map((entry, i) => {
+				const key = rowKey(entry);
+				const children = columns.map((colDef) => (
+					<TableCell key={colDef.id}>{colDef.cell({ entry })}</TableCell>
+				));
+				const disabled = !!disabledRows.find((row) => key === rowKey(row));
+
+				if (rowComponent) {
+					return rowComponent({ children, entry, disabled });
+				}
+
+				return <TableRow key={key}>{children}</TableRow>;
+			}),
+		[sorted, columns, rowKey, disabledRows, rowComponent],
 	);
 
 	return (

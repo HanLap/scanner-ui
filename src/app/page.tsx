@@ -4,7 +4,7 @@ import FileView from './FileView';
 export default async function Home() {
 	const files = await getFileTree();
 	return (
-		<main className='flex min-h-screen flex-col items-center justify-between p-24'>
+		<main className='h-screen w-screen flex flex-col'>
 			<FileView files={files} />
 		</main>
 	);
