@@ -47,7 +47,7 @@ const columns: ColumnDefinition<FileNode>[] = [
 					data-no-dnd='true'
 					asChild
 				>
-					<Link href={entry.url as Route}>
+					<Link href={(`/file/${entry.url}`) as Route}>
 						<Download className='h-4 w-4' />
 					</Link>
 				</Button>

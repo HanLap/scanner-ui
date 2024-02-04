@@ -34,9 +34,9 @@ export async function getFileTree(): Promise<FileNode[]> {
 	const files = items.filter(({ stats }) => stats.isFile());
 
 	return files.map((file) => ({
-		id: path.join('/file', file.name),
+		id: file.name,
 		name: file.name,
-		url: path.join('/file', file.name),
+		url: file.name,
 		date: file.stats.mtime,
 	}));
 }

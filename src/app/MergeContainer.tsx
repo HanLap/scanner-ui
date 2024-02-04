@@ -8,7 +8,19 @@ import {
 } from '@dnd-kit/sortable';
 import Draggable from './Draggable';
 import MergeItem from './MergeItem';
-import { mergeFiles } from './actions';
+import { interleaveFiles, mergeFiles } from './actions';
+
+function download(data: Uint8Array) {
+	const blob = new Blob([new Uint8Array(data)], { type: 'application/pdf' });
+
+	const downloadLink = document.createElement('a');
+	downloadLink.href = URL.createObjectURL(blob);
+	downloadLink.setAttribute('download', 'merge.pdf');
+	downloadLink.setAttribute('hidden', 'true');
+	document.body.appendChild(downloadLink);
+	downloadLink.click();
+	document.body.removeChild(downloadLink);
+}
 
 type Props = {
 	files: FileNode[];
@@ -20,8 +32,21 @@ export default function MergeContainer({ files, onFileRemoved, open }: Props) {
 	const { isOver, setNodeRef } = useDroppable({ id: 'droppable' });
 
 	const handleMergeFiles = async () => {
-		const res = await mergeFiles(files.map(({ id }) => id));
+		const res = await mergeFiles(files.map((f) => f.url));
+
 		console.log(res);
+		if (res !== false) {
+			download(res);
+		}
+	};
+
+	const handleInterleaveFiles = async () => {
+		const res = await interleaveFiles(files.map((f) => f.url));
+
+		console.log(res);
+		if (res !== false) {
+			download(res);
+		}
 	};
 
 	return (
@@ -63,9 +88,12 @@ export default function MergeContainer({ files, onFileRemoved, open }: Props) {
 						</SortableContext>
 					</div>
 				</div>
-				<div className='flex items-center p-6 pt-0'>
+				<div className='flex items-center gap-4 p-6 pt-0'>
 					<Button variant='outline' onClick={handleMergeFiles}>
 						Merge
+					</Button>
+					<Button variant='outline' onClick={handleInterleaveFiles}>
+						Interleave
 					</Button>
 				</div>
 			</div>
