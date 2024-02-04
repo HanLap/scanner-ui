@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { PDFDocument, drawImage } from 'pdf-lib';
 import { readFile } from './filesystem';
 
 const MIMETYPE_PDF = 'application/pdf';
