@@ -11,9 +11,7 @@ export async function GET(
 	}
 
 	if (!mimeType) {
-		return new Response('Unkown Mime-Type', {
-			status: 500,
-		});
+		return new Response(blob);
 	}
 
 	return new Response(blob, {

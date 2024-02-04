@@ -1,27 +1,23 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import mime from 'mime-types';
+import { UniqueIdentifier } from '@dnd-kit/core';
 
 export type FileNode = FileEntry | Directory;
 
 type FileEntry = {
+	id: UniqueIdentifier
 	name: string;
 	url: string;
 	date: Date;
 };
 
 type Directory = {
+	id: UniqueIdentifier
 	name: string;
 	url: string;
 	children: FileNode[];
 	date: Date;
-};
-
-const nowWithMin = (min: number) => {
-	const date = new Date();
-	date.setMinutes(min);
-	date.setSeconds(0);
-	return date;
 };
 
 export async function getFileTree(): Promise<FileNode[]> {
@@ -38,8 +34,9 @@ export async function getFileTree(): Promise<FileNode[]> {
 	const files = items.filter(({ stats }) => stats.isFile());
 
 	return files.map((file) => ({
+		id: file.name,
 		name: file.name,
-		url: path.join('/file', file.name),
+		url: file.name,
 		date: file.stats.mtime,
 	}));
 }
