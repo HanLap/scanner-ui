@@ -3,6 +3,10 @@ import { FileNode } from '@/lib/filesystem';
 import { cn, download } from '@/lib/utils';
 import { interleaveFiles } from './actions';
 import { useDroppable } from '@dnd-kit/core';
+import { useFormState, useFormStatus } from 'react-dom';
+import { Loader2 } from 'lucide-react';
+import { ReactNode } from 'react';
+import { SubmitButton } from '../submit-button';
 
 type Props = {
 	files: (FileNode | undefined)[];
@@ -34,13 +38,11 @@ export function InterleaveContainer({ files, onFileRemoved }: Props) {
 				<FileDrop id='interleave-back' file={back} placeholder='Back Pages' />
 			</div>
 			<div className='flex items-center gap-4 p-6 pt-0'>
-				<Button
-					variant='outline'
-					onClick={handleInterleaveFiles}
-					disabled={!front || !back}
-				>
-					Interleave
-				</Button>
+				<form action={handleInterleaveFiles}>
+					<SubmitButton disabled={!front || !back} className='w-24'>
+						Interleave
+					</SubmitButton>
+				</form>
 			</div>
 		</div>
 	);

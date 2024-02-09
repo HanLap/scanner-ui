@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { FileNode } from '@/lib/filesystem';
 import { cn, download } from '@/lib/utils';
 import { useDroppable } from '@dnd-kit/core';
 import {
@@ -6,9 +6,9 @@ import {
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import Draggable from '../Draggable';
+import { SubmitButton } from '../submit-button';
 import MergeItem from './MergeItem';
-import { mergeFiles, interleaveFiles } from './actions';
-import { FileNode } from '@/lib/filesystem';
+import { mergeFiles } from './actions';
 
 type Props = {
 	files: FileNode[];
@@ -61,11 +61,14 @@ export function ConcatContainer({ files, onFileRemoved }: Props) {
 					</SortableContext>
 				</div>
 			</div>
-			<div className='flex items-center gap-4 p-6 pt-0'>
-				<Button variant='outline' onClick={handleMergeFiles}>
-					Merge
-				</Button>
-			</div>
+			<form
+				action={handleMergeFiles}
+				className='flex items-center gap-4 p-6 pt-0'
+			>
+				<SubmitButton disabled={files.length < 2} className='w-20'>
+					Concat
+				</SubmitButton>
+			</form>
 		</div>
 	);
 }
