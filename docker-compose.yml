@@ -1,0 +1,10 @@
+
+services:
+  scanner-ui:
+    build: .
+    environment:
+      - FILE_ROOT=/var/scanner-ui
+    volumes:
+      - ./data:/var/scanner-ui
+    ports:
+      - 3000:3000
